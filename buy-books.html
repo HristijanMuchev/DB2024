@@ -1,0 +1,66 @@
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buy Form</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo-container">
+        <img src="logo.png" alt="Virtual Book Heaven Logo" class="logo" />
+        <a style="text-decoration: none" href="index.html"
+          ><h1>Virtual Book Heaven</h1></a
+        >
+      </div>
+    </header>
+
+    <div class="buy-form">
+      <h2>Buy Book Form</h2>
+      <form id="buy-form" action="process_payment.php" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname" required />
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required />
+
+        <label for="payment-method">Payment Method:</label>
+        <select id="payment-method" name="payment-method">
+          <option value="cash">Cash</option>
+          <option value="credit-card">Credit Card</option>
+          <option value="other">Other</option>
+        </select>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" min="1" id="qunatity" name="Quantity" style="appearance: textfield;" required />
+        <br><br>
+        <button id="submit-message" type="submit">Submit</button>
+
+        <div id="success-message" style="display: none">
+          Your payment is proceeded!
+        </div>
+      </form>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 Virtual Book Heaven. All rights reserved.</p>
+    </footer>
+
+    <script>
+      document
+        .getElementById("buy-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the form from submitting
+          document.getElementById("success-message").style.display = "block"; // Show the success message
+          setTimeout(function () {
+            document.getElementById("success-message").style.display = "none"; // Hide the success message
+            document.getElementById("buy-form").reset(); // Clear form fields
+          }, 5 * 1000); // 5 seconds 
+        });
+    </script>
+  </body>
+</html>
