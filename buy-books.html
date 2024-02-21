@@ -1,10 +1,9 @@
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Buy Form</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
     <header>
@@ -36,8 +35,15 @@
         </select>
 
         <label for="quantity">Quantity:</label>
-        <input type="number" min="1" id="qunatity" name="Quantity" style="appearance: textfield;" required />
-        <br><br>
+        <input
+          type="number"
+          min="1"
+          id="qunatity"
+          name="Quantity"
+          style="appearance: textfield"
+          required
+        />
+        <br /><br />
         <button id="submit-message" type="submit">Submit</button>
 
         <div id="success-message" style="display: none">
@@ -51,15 +57,44 @@
     </footer>
 
     <script>
+      async function executePayment() {
+        // Get form data
+        const formData = new FormData(document.getElementById("buy-form"));
+
+        // Add bookId to payload from url pathname
+        const payload = Object.fromEntries(formData.entries());
+        payload.bookid = window.location.pathname.split("/").slice(-1)[0];
+
+        const response = await fetch("/api/order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.text();
+        document.getElementById("success-message").innerHTML = data;
+        console.log(data); // Log the response from the server
+
+        document.getElementById("success-message").style.display = "block"; // Show the success message
+        setTimeout(function () {
+          document.getElementById("success-message").style.display = "none"; // Hide the success message
+          document.getElementById("buy-form").reset(); // Clear form fields
+        }, 5 * 1000); // 5 seconds
+      }
+
       document
         .getElementById("buy-form")
         .addEventListener("submit", function (event) {
           event.preventDefault(); // Prevent the form from submitting
+
+          executePayment();
+
           document.getElementById("success-message").style.display = "block"; // Show the success message
           setTimeout(function () {
             document.getElementById("success-message").style.display = "none"; // Hide the success message
             document.getElementById("buy-form").reset(); // Clear form fields
-          }, 5 * 1000); // 5 seconds 
+          }, 5 * 1000); // 5 seconds
         });
     </script>
   </body>

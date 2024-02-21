@@ -1,9 +1,10 @@
 //API Calls
 
 const apiUrl = "http://localhost:3000";
+
 async function fetchBooks() {
   const response = await (await fetch(`${apiUrl}/api/books`)).json();
-
+  console.log(response)
   response.forEach(function (book) {
     book.image = "rptgtpxd.jpg";
   });
@@ -87,6 +88,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   var showMoreButtons = document.querySelectorAll(".showmore-button");
   showMoreButtons.forEach(function (button, index) {
+    // Generate the modal for each book
     button.addEventListener("click", function () {
       var showModal = document.createElement("div");
       showModal.classList.add("modal");
@@ -112,20 +114,18 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       // Add event listener to the "Show" button
       var showButton = showModal.querySelector(".buy-button");
+      const buyBookUrl = `${apiUrl}/buy/${featuredBooks[index].bookid}`;
       showButton.addEventListener("click", async function () {
-        const html = await (
-          await fetch(`${apiUrl}/buy/${featuredBooks[index].id}`)
-        ).text();
-        var newTab = window.open("http:localhost:3000/buy-books.html");
+        // Open BUY BOOK in new tab
+        const html = await (await fetch(buyBookUrl)).text();
+        var newTab = window.open(buyBookUrl);
+        // newTab.document.location.href = buyBookUrl;
+        newTab.history.replaceState({}, "", buyBookUrl);
         newTab.document.write(html);
       });
     });
   });
 });
-
-function buyBook() {
-  window.location.href = "buy-books.html";
-}
 
 function createBookElement(book) {
   var bookElement = document.createElement("div");
@@ -173,7 +173,3 @@ function createFeaturedSection(books) {
 }
 
 var mainElement = document.querySelector("main");
-
-// TODO
-// show more button
-// redirect to buy
